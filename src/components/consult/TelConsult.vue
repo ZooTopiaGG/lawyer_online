@@ -2,6 +2,18 @@
   <div class="Tel">
     <lawyer :child-lawyer="info_data"></lawyer>
     <!-- <div class="separate"></div> -->
+    <mt-cell class="profession" title="选择咨询分类" :label="checkedProfession.name ? professionLabelNo : professionLabel " is-link @click.native="profession">
+      <span style="color: #333" v-if="checkedProfession.name">{{ checkedProfession.name }}</span>
+    </mt-cell>
+    <mt-popup
+      v-model="popupVisible"
+      position="bottom" class="popups">
+      <ul class="profession-list">
+        <li class="profession-list-cell" v-for="(item, index) in profession_list" :key="index" @click.stop="checkProfession(index)">
+          {{ item.name }}
+        </li>
+      </ul>
+    </mt-popup>
     <commit></commit>
     <div class="part3">
       <a href="javascript:;" @click="prompt">
@@ -26,6 +38,7 @@
     },
     data(){
       return {
+        popupVisible: false,
         questionPrice:'',
         content:'',
         id:'',
@@ -37,18 +50,47 @@
         pic: '',
         bus_data: {},
         info_data: {},
+        profession_list: [],
+        // 选中的专业
+        checkedProfession: {
+          name: ''
+        },
+        // label
+        professionLabel: '为您咨询的法律问题选择合适的分类',
+        professionLabelNo: ''
       }
     },
     methods:{
+      checkProfession (index) {
+        this.checkedProfession = this.profession_list[index]
+        this.popupVisible = !this.popupVisible
+      },
+      profession () {
+        this.popupVisible = !this.popupVisible
+      },
+      getLawyerList () {
+        axios.get('shared/lawyer_typeList')
+        .then(res => {
+          res.data.result.forEach((val, index) => {
+            val.children.forEach((v, i) => {
+              this.profession_list.push(v)
+            })
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      },
       prompt () {
         let data = {
           //  type 咨询的业务类型
           type: this.$route.params.businessId,
           questionPrice: this.$route.params.price,
           // 业务类型名称
-          typeName: '电话咨询',
+          typeName: this.checkedProfession.name,
           // businessType 判断业务类型 执行方法
-          businessType: this.$route.params.businessType
+          businessType: this.$route.params.businessType,
+          lawyerType: this.checkedProfession.code
         }
         this.$emit('parentMsg', data)
       },
@@ -58,6 +100,14 @@
           let r = res.data
           if(r.isSuc){
             this.info_data = r.result
+            // 遍历业务列表 进行匹配
+            if (r.result.AllBusinessInfo.SysBussinessInfos) {
+              r.result.AllBusinessInfo.SysBussinessInfos.forEach((val, index) => {
+                if (val.BussinessID == this.$route.params.businessId ) {
+                  window.localStorage.setItem('PRICE', val.Price)
+                } 
+              })
+            }
             // 本地保存数据
             let dt = JSON.stringify(r.result)
             window.localStorage.setItem('LAWYER_DATA', dt)
@@ -105,12 +155,51 @@
       //   this.bus_data = bd
       // }
       this.getInfo()
+      this.getLawyerList()
     }
   }
 </script>
+<style>
+  .profession .mint-cell-wrapper{
+    padding: 0.2rem 0.3rem;
+    border-bottom: 1px solid #ebebeb;
+    border-top: 0;
+    background-image: none;
+    background-size: 0;
+    background-repeat: inherit;
+    background-position: top left;
+    background-origin: content-box;
+  }
+  .profession .mint-cell-text, .profession .mint-cell-label{
 
-<style scoped>
+    font-size: 0.28rem
+  }
+  .profession .mint-cell-label{
+    margin-top: 0.2rem;
+  }
+  .popups{
+    width:100%;    
+    padding: 0.2rem 0;
+  }
   
+</style>
+<style scoped>
+  .profession-list{
+    max-height: 5.0rem;
+    overflow-y: auto;
+  }
+  .profession-list::-webkit-scrollbar {
+    display:none
+  }
+  .profession-list-cell{
+    height: 0.8rem;
+    line-height: 0.8rem;
+    text-align: center;
+    font-size: 0.32rem;
+  }
+  .profession-list-cell:hover, .profession-list-cell:active{
+    background: #d8d8d8;
+  }
   .Tel{
     background: #fff
   }

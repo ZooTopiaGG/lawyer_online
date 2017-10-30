@@ -83,6 +83,14 @@
         if (racct.isSuc) {
           // 不能用this 
           self.info_data = racct.result
+          // 遍历自定义业务列表 进行匹配
+          if (racct.result.AllBusinessInfo.BussinessInfos) {
+            racct.result.AllBusinessInfo.BussinessInfos.forEach((val, index) => {
+              if (val.BussinessID == self.$route.params.businessId ) {
+                window.localStorage.setItem('PRICE', val.Price)
+              } 
+            })
+          }
           // 本地保存数据
           // let dt = JSON.stringify(racct.result)
           // window.localStorage.setItem('LAWYER_DATA', dt)
@@ -120,6 +128,7 @@
           self.bus_data = perms.data.result
         } else {
           Toast(perms.data.message)
+          self.$router.push({ name: 'home', params: { userId: self.$route.params.userId } })
         }
       })) 
     },

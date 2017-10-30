@@ -45,6 +45,7 @@ export default {
       let bus_data = this.customBusiness[index]
       bus_data = JSON.stringify(bus_data)
       window.localStorage.setItem('BUS_DATA', bus_data)
+      window.localStorage.setItem('PRICE', price)
       if (type == 0) {
         this.$router.push({ name: 'customtext', params: { userId: userId, price: price * 100, businessId: businessId, businessType: type }})
       } else if (type == 1) {

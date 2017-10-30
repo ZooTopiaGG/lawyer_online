@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { Toast,Indicator } from 'mint-ui'
+import { Toast, Indicator } from 'mint-ui'
 export default {
   name: 'info',
   data () {
@@ -40,7 +40,9 @@ export default {
       // 业务类型名称
       typeName: '',
       // 业务类型
-      businessType: ''
+      businessType: '',
+      // 擅长领域
+      lawyerType: ''
     }
   },
   methods: {
@@ -96,13 +98,13 @@ export default {
     },
     // 创建咨询订单
     prompt(){
-      Indicator.open()
       // 存储用户姓名
       window.sessionStorage.setItem('name',this.username)
       // 存储业务类型
       window.sessionStorage.setItem('businessName',this.typeName)
       //  此处通过 businessType 判断 创建订单的参数 已经 api接口
       if (this.businessType == 0) {
+        Indicator.open()
         // 图文咨询类
         var para = {
           areaCode: '86',
@@ -120,13 +122,18 @@ export default {
         var apiUrl = 'advice/create_question_union'
       } else if (this.businessType == 1) {
         // 电话咨询类
+        if (!this.lawyerType) {
+          Toast('请选择律师咨询分类')
+          return
+        }
+        Indicator.open()
         var para = {
           areaCode: '86',
           mobile: this.tel,
           smsCode:this.code,
           price: this.questionPrice,
           name: this.username,
-          LawyerType: 900,
+          LawyerType: this.lawyerType,
           Source: 1,
           lawyer_id: this.$route.params.userId,
           BusinessID: this.$route.params.businessId,
@@ -136,6 +143,7 @@ export default {
         para = Qs.stringify(para)
         var apiUrl = 'callQuestion/create'
       } else if (this.businessType == 2) {
+        Indicator.open()
         // 法律事务类
         var para = {
           areaCode: '86',
@@ -158,7 +166,7 @@ export default {
       //创建咨询订单
       axios.post(apiUrl,para)
       .then(res => {
-        Indicator.close();
+        Indicator.close()
         //this.allData = res.data;
         if(res.data.isSuc){
           Toast('咨询订单创建成功')
@@ -187,15 +195,24 @@ export default {
     },
   },
   mounted(){
+    let price = window.localStorage.getItem('PRICE')
     // 获取父组件传来的数据
     this.$parent.$on('parentMsg', (val) => {
       this.questionPrice = val.questionPrice / 100
       this.content = val.content
       this.typeName = val.typeName
       this.businessType = val.businessType
+      if (val.lawyerType) {
+        this.lawyerType = val.lawyerType
+      }
       // 此处不需判断 *****************
       // alert(this.businessType)
-      this.prompt()
+      if (price == this.questionPrice) {
+        this.prompt()
+      } else {
+        Toast('价格参数不符合')
+        return
+      }
     })
     if(Coms.isWeiXin()){
       //dosomething

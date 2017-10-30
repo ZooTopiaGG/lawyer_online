@@ -5,18 +5,23 @@ import App from './App.vue'
 import vuex from 'vuex'
 import 'mint-ui/lib/style.css'
 import 'mint-ui/lib/font/style.css'
-import { Loadmore, Toast, Indicator, TabContainer, TabContainerItem, Cell, Tabbar, TabItem } from 'mint-ui'
+import { Loadmore, Toast, Indicator, TabContainer, TabContainerItem, Cell, Tabbar, TabItem, Popup, Picker } from 'mint-ui'
 
 Vue.use(vuex)
 
 // collapse 展开折叠
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
+import { Form, FormItem, Input, Button } from 'element-ui'
 
 //Element 样式表
 import 'element-ui/lib/theme-default/index.css'
 import 'element-ui/lib/theme-default/base.css'
 //按需加载 Element-ui
 Vue.component(CollapseTransition.name, CollapseTransition)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Input)
+Vue.use(Button)
 
 //按需加载 Mint-UI
 Vue.component(Loadmore.name,Loadmore)
@@ -25,6 +30,8 @@ Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.component(Tabbar.name, Tabbar)
 Vue.component(TabItem.name, TabItem)
 Vue.component(Cell.name, Cell)
+Vue.component(Popup.name, Popup)
+Vue.component(Picker.name, Picker)
 
 // Vue.use(MintUI)
 
@@ -56,9 +63,9 @@ axios.defaults.timeout = 5000
 // 配置请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // 测试网接口地址
-axios.defaults.baseURL = 'http://pay.lawyer-says.cn/api'
+axios.defaults.baseURL = 'http://pay.lawyer-says.cn/api/'
 // 正式网接口地址
-// axios.defaults.baseURL = 'http://pay.lawyer-says.com/'
+// axios.defaults.baseURL = 'http://pay.lawyer-says.com/api'
 
 // 添加一个请求拦截器
 axios.interceptors.request.use(config => {

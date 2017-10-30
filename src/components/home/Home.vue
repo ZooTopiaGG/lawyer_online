@@ -68,8 +68,14 @@ export default {
           var head = document.getElementsByTagName('head')[0];
           document.title = r.result.lawyer_name+'律师的微网站'
           // hack在微信等webview中无法修改document.title的情况
-          var  iframe = document.createElement('iframe');
+          var iframe = document.createElement('iframe');
+          // <link rel="shortcut icon" href="Images/wangyi.ico" type="image/x-icon" />
+          var link = document.createElement('link');
+          link.setAttribute('rel', 'shortcut icon');
+          link.setAttribute('href', r.result.avatar);
+          link.setAttribute('type', 'image/x-icon');
           head.appendChild(iframe);
+          head.appendChild(link);
           iframe.addEventListener('load',function(){
             setTimeout(function() {
                iframe.removeEventListener('load');

@@ -65,6 +65,14 @@
           let r = res.data
           if(r.isSuc){
             this.info_data = r.result
+            // 遍历业务列表 进行匹配
+            if (r.result.AllBusinessInfo.SysBussinessInfos) {
+              r.result.AllBusinessInfo.SysBussinessInfos.forEach((val, index) => {
+                if (val.BussinessID == this.$route.params.businessId ) {
+                  window.localStorage.setItem('PRICE', val.Price)
+                } 
+              })
+            }
             // 本地保存数据
             let dt = JSON.stringify(r.result)
             window.localStorage.setItem('LAWYER_DATA', dt)

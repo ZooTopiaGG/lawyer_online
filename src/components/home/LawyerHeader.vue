@@ -11,10 +11,14 @@
           律所:&nbsp;&nbsp;<span>{{ childData.company_name }}</span>
         </div>
       </div>
-     <!--  <div class="collect">
+      <div class="collect"  @click="guideShow">
         <img src="../../assets/images/icon_10.png">
         <div>收藏</div>
-      </div> -->
+      </div>
+      <div class="collect-guide" v-show="showGuide" @click.self="guideHide">
+        <img class="img1" src="../../assets/images/h52.png">
+        <img class="img2" src="../../assets/images/h51.png">
+      </div>
     </div>
     <div class="second flex">
       <div class="second-div1"><span>已认证</span></div>
@@ -45,16 +49,15 @@
         </div>
         <div class="intro-con">
           <div class="intro-title">简介</div>
-          <div class="intro-content" v-html="childData.description">
-            
-          </div>
+          <div class="intro-content" v-if="childData.description" v-html="childData.description"></div>
+          <div class="intro-content" v-else>暂无简介</div>
           <div class="intro-close" @click="introShow=!introShow">
             收起简介&nbsp;<i></i>
           </div>
         </div>
       </div>
     </el-collapse-transition>
-    <div class="third" >
+    <div class="third" v-if="honor">
       <div class="flex" v-for="(item, index) in honor" :key="index">
         <img src="../../assets/images/6.png">
         <span>{{ item }}</span>
@@ -85,10 +88,19 @@ export default {
     return {
       introShow: false,
       // 荣誉
-      honor: ''
+      honor: '',
+      showGuide: false
     }
   },
   props: ['childData'],
+  methods: {
+    guideShow () {
+      this.showGuide = true
+    },
+    guideHide () {
+      this.showGuide = false
+    }
+  },
   watch: {
     childData () {
       if(this.childData.award_winning){
@@ -229,5 +241,26 @@ export default {
   height: 0.15rem;
   background: url(../../assets/images/icon_04.png) no-repeat;
   background-size: cover;
+}
+.collect-guide{
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  padding: 0.4rem 0.3rem 0.3rem 0.3rem;
+}
+.img1{
+  width: 2.98rem;
+  height: 2.79rem;
+  float: right;
+  margin-bottom: 0.6rem;
+  padding-right: 0.3rem;
+}
+.img2{
+  width: 6.90rem;
+  height: 6.17rem
 }
 </style>

@@ -3,6 +3,10 @@
     <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" @bottom-status-change="handleBottomChange" v-if="show" :class="{ hasLoad: isLoad }">
       <ul class="solution-list">
         <li @click="toDetails(item.question_id)" v-for="(item, index) in listData" :key="index">
+          <!-- <div class="flex flex-align-center">
+            <img class="img1" src="http://test2.lawyer-says.cn/images/images/10.png">
+            <div><span>陈颢文</span></div>
+          </div> -->
           <div class="content">
             {{ item.description }}
           </div>

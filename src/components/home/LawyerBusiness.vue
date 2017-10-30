@@ -3,8 +3,8 @@
     <div class="business flex flex-pack-around">
       <div class="bbox flex flex-pack-around" v-for="(item, index) in sysBusiness" :key="index" @click="toConsult(item.UserID, item.Price, item.BussinessID, item.BussinessType, index)">
         <div class="flex flex-align-center link-box">
-          <img v-if="!item.avatar" src="../../assets/images/icon_36.png">
-          <img v-else :src="item.avatar">
+          <img v-if="!item.Icon" src="../../assets/images/icon_36.png">
+          <img v-else :src="item.Icon">
             <div class="desc">
               <p>{{ item.BussinessName }}</p>
               <p>￥{{ item.Price }}</p>
@@ -37,6 +37,7 @@ export default {
       let bus_data = this.sysBusiness[index]
       bus_data = JSON.stringify(bus_data)
       window.localStorage.setItem('BUS_DATA', bus_data)
+      window.localStorage.setItem('PRICE', price)
       if (type == 0) {
         this.$router.push({ name: 'text', params: { userId: userId, price: price * 100, businessId: businessId, businessType: type } })
       } else if (type == 1) {

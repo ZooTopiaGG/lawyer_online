@@ -10,6 +10,9 @@ import CustomEntrustConsult from '../../components/consult/CustomEntrustConsult.
 import CustomTextConsult from '../../components/consult/CustomTextConsult.vue'
 import Pay from '../../components/pay/Pay.vue'
 import Success from '../../components/pay/Success.vue'
+import CoreApply from '../../components/core/CoreApply.vue'
+import ApplyDescription from '../../components/core/ApplyDescription.vue'
+import ApplySuccess from '../../components/core/ApplySuccess.vue'
 
 Vue.use(Router)
 
@@ -89,6 +92,27 @@ export default new Router({
       }
     },
     {
+      path: '/apply',
+      name: 'apply',
+      component: CoreApply,
+      meta: {
+        keepAlive: true
+      }
+    },
+    {
+      path: '/description',
+      name: 'desc',
+      component: ApplyDescription,
+      meta: {
+        keepAlive: true
+      }
+    },
+    {
+      path: '/applysuc',
+      name: 'applysuc',
+      component: ApplySuccess,
+    },
+    {
       path: '/:userId',
       name: 'home',
       component: Home,
@@ -96,10 +120,11 @@ export default new Router({
         keepAlive: true
       }
     },
+    // 404 页面
     {
       path: '*',
       component: Home,
-      redirect:'/home'
+      redirect:'/:userId'
     }
   ]
 })

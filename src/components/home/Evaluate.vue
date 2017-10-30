@@ -75,7 +75,7 @@
 			getComments(){
 				var _this = this
 				var para = {
-	    			userID: 309
+	    			userID: _this.$route.params.userId
 	    		}
 	    		para = Qs.stringify(para)
 	    		axios.post('shareToListen/GetComments',para)
